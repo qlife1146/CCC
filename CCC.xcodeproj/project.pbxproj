@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		81E7A2A12E1B8697004C5C32 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81E7A2A02E1B8697004C5C32 /* SnapKit */; };
+		81E7A2A62E1B86AE004C5C32 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 81E7A2A52E1B86AE004C5C32 /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		81E7A27C2E1B8174004C5C32 /* CCC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81E7A2A62E1B86AE004C5C32 /* Alamofire in Frameworks */,
+				81E7A2A12E1B8697004C5C32 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = CCC;
 			packageProductDependencies = (
+				81E7A2A02E1B8697004C5C32 /* SnapKit */,
+				81E7A2A52E1B86AE004C5C32 /* Alamofire */,
 			);
 			productName = CCC;
 			productReference = 81E7A27C2E1B8174004C5C32 /* CCC.app */;
@@ -107,6 +116,10 @@
 			);
 			mainGroup = 81E7A2732E1B8174004C5C32;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				81E7A29F2E1B8697004C5C32 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				81E7A2A42E1B86AE004C5C32 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 81E7A27D2E1B8174004C5C32 /* Products */;
 			projectDirPath = "";
@@ -148,9 +161,9 @@
 				DEVELOPMENT_TEAM = 6DA7CAGY3R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CCC/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CCC;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -160,9 +173,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.luca.CCC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -176,9 +193,9 @@
 				DEVELOPMENT_TEAM = 6DA7CAGY3R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CCC/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CCC;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -188,9 +205,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.luca.CCC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -337,6 +358,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		81E7A29F2E1B8697004C5C32 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		81E7A2A42E1B86AE004C5C32 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		81E7A2A02E1B8697004C5C32 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81E7A29F2E1B8697004C5C32 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		81E7A2A52E1B86AE004C5C32 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81E7A2A42E1B86AE004C5C32 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 81E7A2742E1B8174004C5C32 /* Project object */;
 }

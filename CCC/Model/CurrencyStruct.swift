@@ -198,6 +198,7 @@ struct CurrencyStruct: Codable {
 
 
 enum Default {
-  static let mainTextBold = UIFont.systemFont(ofSize: 17, weight: .bold)
-  static let subTextBold = UIFont.systemFont(ofSize: 17, weight: .medium)
+  static let mainTextFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+  static let subTextFont = UIFont.systemFont(ofSize: 17, weight: .medium)
+  static let mainTitleFont = UIFont.systemFont(ofSize: 40, weight: .bold)
 }

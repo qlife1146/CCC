@@ -33,14 +33,14 @@ class TableViewCell: UITableViewCell {
   }
   
   private func setupUI() {
-    countryCodeLabel.textColor = .mainText
-    countryCodeLabel.font = Default.mainTextBold
+    countryCodeLabel.textColor = UIColor(named: "mainTextColor")
+    countryCodeLabel.font = Default.mainTextFont
         
-    countryNameLabel.textColor = .subText
-    countryNameLabel.font = Default.subTextBold
+    countryNameLabel.textColor = UIColor(named: "mainTextColor")
+    countryNameLabel.font = Default.subTextFont
     
-    currencyRateLabel.textColor = .mainText
-    currencyRateLabel.font = Default.subTextBold
+    currencyRateLabel.textColor = UIColor(named: "mainTextColor")
+    currencyRateLabel.font = Default.subTextFont
 
     countryStack.axis = .vertical
     countryStack.distribution = .fillProportionally

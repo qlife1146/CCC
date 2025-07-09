@@ -60,19 +60,19 @@ class CCCViewController: UIViewController {
   }
 
   private func setupUI() {
-    view.backgroundColor = UIColor(named: "MainBgColor")
-    
+    view.backgroundColor = UIColor(named: "BackgroundColor")
+
     titleLabel.text = "환율 정보"
-    titleLabel.textColor = UIColor(named: "MainTextColor")
+    titleLabel.textColor = UIColor(named: "TextColor")
     titleLabel.font = Default.mainTitleFont
-    
+
     searchBar.searchBarStyle = .minimal
     searchBar.placeholder = "통화 검색"
     searchBar.delegate = self
-    
-    tableView.backgroundColor = UIColor(named: "MainBgColor")
+
+    tableView.backgroundColor = UIColor(named: "BackgroundColor")
     tableView.showsVerticalScrollIndicator = false
-    
+
     // MARK: tableView 기본 요소
     // 데이터 제공자 설정
     tableView.delegate = self
@@ -80,21 +80,21 @@ class CCCViewController: UIViewController {
     tableView.dataSource = self
     // cell 재사용을 위한 등록
     tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
-    
+
     for item in [titleLabel, searchBar, tableView] {
       view.addSubview(item)
     }
-    
+
     titleLabel.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide)
       $0.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
     }
-    
+
     searchBar.snp.makeConstraints {
       $0.top.equalTo(titleLabel.snp.bottom)
       $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
     }
-    
+
     tableView.snp.makeConstraints {
       $0.top.equalTo(searchBar.snp.bottom)
       $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -106,7 +106,7 @@ extension CCCViewController: UITableViewDataSource {
   // 섹션 1개에 나타낼 Row(줄) 개수, count 등
   func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
     let count = viewModel.numberOfRates()
-    
+
     if count == 0 {
       tableView.setEmptyLabel("검색 결과가 없습니다.")
     } else {
@@ -129,47 +129,45 @@ extension CCCViewController: UITableViewDataSource {
     }
     return cell
   }
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+  func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let selectedCurrency = viewModel.currency(at: indexPath.row) else { return }
     print("selectedCurrency: \(selectedCurrency)")
-    
+//    title = "환율 정보"
     let calculatorVC = CalculatorConroller()
     let backNavBarButton = UIBarButtonItem(title: "환율 정보", style: .plain, target: self, action: nil)
-    self.navigationItem.backBarButtonItem = backNavBarButton
+    navigationItem.backBarButtonItem = backNavBarButton
     calculatorVC.currency = selectedCurrency
     navigationController?.pushViewController(calculatorVC, animated: true)
   }
 }
 
-extension CCCViewController: UITableViewDelegate {
-
-}
+extension CCCViewController: UITableViewDelegate {}
 
 extension CCCViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange _: String) {
     guard let text = searchBar.text else { return }
     viewModel.search(searchText: text)
-    self.tableView.reloadData()
+    tableView.reloadData()
   }
 }
 
-extension UITableView  {
+extension UITableView {
   func setEmptyLabel(_ message: String) {
     let messageLabel = UILabel()
     messageLabel.text = message
-    messageLabel.textColor = UIColor(named: "SubTextColor")
+    messageLabel.textColor = UIColor(named: "SecondaryTextColor")
     messageLabel.textAlignment = .center
     messageLabel.font = Default.subTextFont
     messageLabel.numberOfLines = 0
     messageLabel.translatesAutoresizingMaskIntoConstraints = false
-    
-    self.backgroundView = messageLabel
-    self.separatorStyle = .none
+
+    backgroundView = messageLabel
+    separatorStyle = .none
   }
-  
+
   func restore() {
-    self.backgroundView = nil
-    self.separatorStyle = .singleLine
+    backgroundView = nil
+    separatorStyle = .singleLine
   }
 }

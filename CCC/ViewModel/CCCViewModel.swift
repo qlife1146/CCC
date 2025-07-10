@@ -22,7 +22,7 @@ class CCCViewModel: ViewModelProtocol {
     var timeNextUpdate: String = ""
     var isFavorite: Bool = false
     var ratesList: [String: Double] = [:] // [country:rate]
-    var ratesKeyList: [String] = [] // key 순서 확정을 위한 배열: 현재는 전체 배열
+    var ratesKeyList: [String] = [] // key 순서 확정을 위한 배열(sorted): 현재는 전체 배열
 //    var bookmarkList: [String] = [] // 즐찾을 위한 필터링 배열: 전체 배열-즐찾
     var filteredList: [String] = [] // 검색을 위한 필터링 배열: 현재는 전제 배열의 일부(필터링)
   }
@@ -32,6 +32,7 @@ class CCCViewModel: ViewModelProtocol {
   var didUpdate: ((State) -> Void)?
   // alert 및 오류 확인을 위한 에러 접수
   var didFail: ((Error) -> Void)?
+  var currentSearchText: String? = nil
 
   private let service = CurrencyAPI()
 
@@ -47,7 +48,6 @@ class CCCViewModel: ViewModelProtocol {
   var onCurrencyUpdated: (() -> Void)?
 
   func fetchCurrencyData() {
-//    let digit: Double = pow(10, 3)
     service.fetchCurrencies { [weak self] result in
       guard let self = self else {
         return
@@ -60,8 +60,12 @@ class CCCViewModel: ViewModelProtocol {
         self.state.result = data.result
         self.state.ratesList = data.rates
         self.state.ratesKeyList = self.state.ratesList.keys.sorted()
+//        { _, _ in // favorite, name
+//
+//        } // 지금은 string으로 sorted.
 
-        self.state.filteredList = self.state.ratesKeyList
+//        self.state.filteredList = self.state.ratesKeyList
+        self.updateFavoriteState()
 
         // MARK: 클로저 바인딩 - 5. ViewModel 클로저 호출(상태 변함 알림)
 
@@ -90,16 +94,50 @@ class CCCViewModel: ViewModelProtocol {
 
   func search(searchText: String) {
     // searchText가 비어있지 않으면
-    if !searchText.isEmpty {
-      // 검색 결과는 searchText에 해당되는 것만 출력
-      state.filteredList = state.ratesKeyList.filter {
-//        $0.contains(searchText)
+    currentSearchText = searchText
+    updateFavoriteState()
+  }
+
+  func sortedRatesKeys() -> [String] {
+    let favCodes = CoreDataManager.shared.fetchAllFavorites()
+    return state.ratesKeyList.sorted { lhs, rhs in
+      let lhsIsFav = favCodes.contains(lhs)
+      let rhsIsFav = favCodes.contains(rhs)
+      if lhsIsFav && !rhsIsFav { return true }
+      if !lhsIsFav && rhsIsFav { return false }
+      return lhs < rhs
+    }
+  }
+
+  func updateFavoriteState() {
+    let favCodes = CoreDataManager.shared.fetchAllFavorites()
+
+    if let searchText = currentSearchText, !searchText.isEmpty {
+      // 검색어 필터링
+      let filteredCodes = state.ratesKeyList.filter {
         let matchesCode = $0.lowercased().contains(searchText.lowercased())
         let matchesName = CurrencyStruct.countryName[$0]?.contains(searchText) ?? false
         return matchesCode || matchesName
       }
+
+      // 즐겨찾기 우선 검색 결과
+      state.filteredList = filteredCodes.sorted { lhs, rhs in
+        let lhsIsFav = favCodes.contains(lhs)
+        let rhsIsFav = favCodes.contains(rhs)
+        if lhsIsFav && !rhsIsFav { return true }
+        if !lhsIsFav && rhsIsFav { return false }
+        return lhs < rhs
+      }
     } else {
-      state.filteredList = state.ratesKeyList
+      // 검색 키워드 없으면 즐겨찾기 우선 정렬
+      state.filteredList = state.ratesKeyList.sorted { lhs, rhs in
+        let lhsIsFav = favCodes.contains(lhs)
+        let rhsIsFav = favCodes.contains(rhs)
+        if lhsIsFav && !rhsIsFav { return true }
+        if !lhsIsFav && rhsIsFav { return false }
+        return lhs < rhs
+      }
     }
+    didUpdate?(state)
   }
 }

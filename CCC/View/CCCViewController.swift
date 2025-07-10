@@ -7,6 +7,7 @@
 
 import SnapKit
 import UIKit
+import CoreData
 
 // Compact Currency Calculator
 // [↓↓환율 스택↓↓↓]
@@ -16,6 +17,8 @@ import UIKit
 // [국명|환율|즐찾]
 
 class CCCViewController: UIViewController {
+  var container: NSPersistentContainer!
+
   private let viewModel = CCCViewModel()
 
   private let titleLabel = UILabel()
@@ -27,6 +30,7 @@ class CCCViewController: UIViewController {
     super.viewDidLoad()
     bindViewModel() // 클로저 바인딩(갱신)
     setupUI() // UI설정
+
     // MARK: 클로저 바인딩 - 2. ViewController에서 ViewModel에게 action 전송
     viewModel.action?(.fetchCurrency)
 
@@ -75,7 +79,7 @@ class CCCViewController: UIViewController {
     tableView.delegate = self
     tableView.dataSource = self
     tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
-    
+
     for item in [titleLabel, searchBar, tableView] {
       view.addSubview(item)
     }
@@ -118,7 +122,19 @@ extension CCCViewController: UITableViewDataSource {
     }
 
     if let currency = viewModel.currency(at: indexPath.row) {
-      cell.configureCell(country: currency.country, rate: currency.rate)
+      let isFavorite = CoreDataManager.shared.isFavorite(code: currency.country)
+      cell.configureCell(country: currency.country, rate: currency.rate, isFavorite: isFavorite)
+      // closure 넘기기
+      cell.favorite = { [weak self] in
+        let code = currency.country
+        
+        if isFavorite {
+          CoreDataManager.shared.removeFavorite(code: code)
+        } else {
+          CoreDataManager.shared.addFavorite(code: code)
+        }
+        self?.viewModel.updateFavoriteState()
+      }
     } else {
       print("xxxx")
     }
@@ -135,6 +151,7 @@ extension CCCViewController: UITableViewDataSource {
     calculatorVC.currency = selectedCurrency
     navigationController?.pushViewController(calculatorVC, animated: true)
   }
+  
 }
 
 extension CCCViewController: UITableViewDelegate {}

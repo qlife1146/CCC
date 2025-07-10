@@ -20,9 +20,10 @@ class CCCViewModel: ViewModelProtocol {
     var result: String? = ""
     var timeLastUpdate: String = ""
     var timeNextUpdate: String = ""
+    var isFavorite: Bool = false
     var ratesList: [String: Double] = [:] // [country:rate]
     var ratesKeyList: [String] = [] // key 순서 확정을 위한 배열: 현재는 전체 배열
-    var bookmarkList: [String] = [] // 즐찾을 위한 필터링 배열: 전체 배열-즐찾
+//    var bookmarkList: [String] = [] // 즐찾을 위한 필터링 배열: 전체 배열-즐찾
     var filteredList: [String] = [] // 검색을 위한 필터링 배열: 현재는 전제 배열의 일부(필터링)
   }
 

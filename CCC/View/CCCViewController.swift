@@ -25,16 +25,14 @@ class CCCViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    // 잘 갖고와지는지 테스트
-//    let service = CurrencyAPI()
-//    service.apiTest()
-
     bindViewModel() // 클로저 바인딩(갱신)
     setupUI() // UI설정
-
     // MARK: 클로저 바인딩 - 2. ViewController에서 ViewModel에게 action 전송
     viewModel.action?(.fetchCurrency)
+
+    // 잘 갖고와지는지 테스트
+    //    let service = CurrencyAPI()
+    //    service.apiTest()
   }
 
   // MARK: 클로저 바인딩 - 1. ViewController에서 ViewModel 생성 후 바인딩 설정
@@ -74,13 +72,10 @@ class CCCViewController: UIViewController {
     tableView.showsVerticalScrollIndicator = false
 
     // MARK: tableView 기본 요소
-    // 데이터 제공자 설정
     tableView.delegate = self
-    // 인터랙션 처리자 설정
     tableView.dataSource = self
-    // cell 재사용을 위한 등록
     tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
-
+    
     for item in [titleLabel, searchBar, tableView] {
       view.addSubview(item)
     }

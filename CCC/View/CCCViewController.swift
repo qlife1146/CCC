@@ -17,31 +17,29 @@ import UIKit
 
 class CCCViewController: UIViewController {
   private let viewModel = CCCViewModel()
-  
+
   private let titleLabel = UILabel()
   private let searchBar = UISearchBar()
   private let mainStackView = UIStackView()
   private lazy var tableView = UITableView()
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     // 잘 갖고와지는지 테스트
 //    let service = CurrencyAPI()
 //    service.apiTest()
 
-    bindViewModel()
-    setupUI()
+    bindViewModel() // 클로저 바인딩(갱신)
+    setupUI() // UI설정
 
     // MARK: 클로저 바인딩 - 2. ViewController에서 ViewModel에게 action 전송
-
     viewModel.action?(.fetchCurrency)
   }
-  
-  // MARK: 클로저 바인딩 - 1. ViewController에서 ViewModel 생성 후 바인딩 설정
 
-  // (state 바뀔 때 UI 갱신되도록 클로저 바인딩)
+  // MARK: 클로저 바인딩 - 1. ViewController에서 ViewModel 생성 후 바인딩 설정
   private func bindViewModel() {
+    // (state 바뀔 때 UI 갱신되도록 클로저 바인딩)
     viewModel.didUpdate = { [weak self] _ in
       guard let self else { return }
       DispatchQueue.main.async {
@@ -60,59 +58,62 @@ class CCCViewController: UIViewController {
       }
     }
   }
-  
-  private func setupUI() {
-    view.backgroundColor = .mainBg
-    
-    titleLabel.text = "환율 정보"
-    titleLabel.textColor = .mainText
-    titleLabel.font = .boldSystemFont(ofSize: 30)
-    
-    searchBar.barStyle = .default
-    
-    mainStackView.axis = .vertical
-    mainStackView.distribution = .fillEqually
-    
-    tableView.backgroundColor = .mainBg
-    
-    // MARK: tableView 기본 요소
 
+  private func setupUI() {
+    view.backgroundColor = UIColor(named: "BackgroundColor")
+
+    titleLabel.text = "환율 정보"
+    titleLabel.textColor = UIColor(named: "TextColor")
+    titleLabel.font = Default.mainTitleFont
+
+    searchBar.searchBarStyle = .minimal
+    searchBar.placeholder = "통화 검색"
+    searchBar.delegate = self
+
+    tableView.backgroundColor = UIColor(named: "BackgroundColor")
+    tableView.showsVerticalScrollIndicator = false
+
+    // MARK: tableView 기본 요소
     // 데이터 제공자 설정
     tableView.delegate = self
     // 인터랙션 처리자 설정
     tableView.dataSource = self
     // cell 재사용을 위한 등록
     tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
-    
-    for item in [mainStackView, tableView] {
+
+    for item in [titleLabel, searchBar, tableView] {
       view.addSubview(item)
     }
-    
-    for label in [titleLabel, searchBar] {
-      mainStackView.addArrangedSubview(label)
-    }
-    
-    mainStackView.snp.makeConstraints {
+
+    titleLabel.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide)
-      $0.leading.trailing.equalToSuperview()
+      $0.leading.equalTo(view.safeAreaLayoutGuide).inset(20)
     }
-    
+
+    searchBar.snp.makeConstraints {
+      $0.top.equalTo(titleLabel.snp.bottom)
+      $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+    }
+
     tableView.snp.makeConstraints {
-      $0.top.equalTo(mainStackView.snp.bottom)
-      $0.leading.trailing.bottom.equalToSuperview()
+      $0.top.equalTo(searchBar.snp.bottom)
+      $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
     }
   }
-  
-//  @objc
-//  private func segueExWithButton() {
-//    self.navigationController?.pushViewController(CCCExViewController(), animated: true)
-//  }
 }
 
 extension CCCViewController: UITableViewDataSource {
   // 섹션 1개에 나타낼 Row(줄) 개수, count 등
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel.numberOfRates()
+  func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+    let count = viewModel.numberOfRates()
+
+    if count == 0 {
+      tableView.setEmptyLabel("검색 결과가 없습니다.")
+    } else {
+      tableView.restore()
+    }
+    return count
+//    return viewModel.numberOfRates()
   }
 
   // 재사용할 셀이 넣을 것
@@ -128,8 +129,45 @@ extension CCCViewController: UITableViewDataSource {
     }
     return cell
   }
+
+  func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let selectedCurrency = viewModel.currency(at: indexPath.row) else { return }
+    print("selectedCurrency: \(selectedCurrency)")
+//    title = "환율 정보"
+    let calculatorVC = CalculatorConroller()
+    let backNavBarButton = UIBarButtonItem(title: "환율 정보", style: .plain, target: self, action: nil)
+    navigationItem.backBarButtonItem = backNavBarButton
+    calculatorVC.currency = selectedCurrency
+    navigationController?.pushViewController(calculatorVC, animated: true)
+  }
 }
 
-extension CCCViewController: UITableViewDelegate {
-//  func tableVie
+extension CCCViewController: UITableViewDelegate {}
+
+extension CCCViewController: UISearchBarDelegate {
+  func searchBar(_ searchBar: UISearchBar, textDidChange _: String) {
+    guard let text = searchBar.text else { return }
+    viewModel.search(searchText: text)
+    tableView.reloadData()
+  }
+}
+
+extension UITableView {
+  func setEmptyLabel(_ message: String) {
+    let messageLabel = UILabel()
+    messageLabel.text = message
+    messageLabel.textColor = UIColor(named: "SecondaryTextColor")
+    messageLabel.textAlignment = .center
+    messageLabel.font = Default.subTextFont
+    messageLabel.numberOfLines = 0
+    messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+    backgroundView = messageLabel
+    separatorStyle = .none
+  }
+
+  func restore() {
+    backgroundView = nil
+    separatorStyle = .singleLine
+  }
 }

@@ -27,9 +27,9 @@ class CurrencyAPI {
       .validate()
       .responseDecodable(of: CurrencyStruct.self) { res in
         switch res.result {
-        case .success(let result):
+        case let .success(result):
           completion(.success(result))
-        case .failure(let error):
+        case let .failure(error):
           completion(.failure(error))
 //          print("error: \(error)")
           // localizedDescription: 에러 간략화
@@ -42,9 +42,9 @@ class CurrencyAPI {
     let service = CurrencyAPI()
     service.fetchCurrencies { result in
       switch result {
-      case .success(let data):
+      case let .success(data):
         print("USD → KRW: \(data.rates["KRW"] ?? 0)")
-      case .failure(let error):
+      case let .failure(error):
         print("환율 정보를 가져오지 못했습니다.\(error.localizedDescription)")
       }
     }

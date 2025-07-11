@@ -180,13 +180,13 @@ struct CurrencyStruct: Codable {
     "YER": "예멘",
     "ZAR": "남아프리카 공화국",
     "ZMW": "잠비아",
-    "ZWL": "짐바브웨"
+    "ZWL": "짐바브웨",
   ]
-  
+
   static func name(for code: String) -> String {
     return countryName[code] ?? "Unknown Country Name"
   }
-  
+
   enum CodingKeys: String, CodingKey {
     case result
     case timeLastUpdate = "time_last_update_utc"
@@ -195,9 +195,10 @@ struct CurrencyStruct: Codable {
   }
 }
 
-
-
 enum Default {
-  static let mainTextBold = UIFont.systemFont(ofSize: 17, weight: .bold)
-  static let subTextBold = UIFont.systemFont(ofSize: 17, weight: .medium)
+  static let mainTextFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+  static let subTextFont = UIFont.systemFont(ofSize: 17, weight: .medium)
+  static let mainTitleFont = UIFont.systemFont(ofSize: 40, weight: .bold)
+  static let ccMainTextFont = UIFont.systemFont(ofSize: 25, weight: .bold)
+  static let ccSubTextFont = UIFont.systemFont(ofSize: 17, weight: .medium)
 }

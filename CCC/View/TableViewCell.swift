@@ -37,7 +37,7 @@ class TableViewCell: UITableViewCell {
     countryCodeLabel.textColor = UIColor(named: "TextColor")
     countryCodeLabel.font = Default.mainTextFont
 
-    countryNameLabel.textColor = UIColor(named: "TextColor")
+    countryNameLabel.textColor = UIColor(named: "SecondaryTextColor")
     countryNameLabel.font = Default.subTextFont
 
     currencyRateLabel.textColor = UIColor(named: "TextColor")
@@ -46,12 +46,15 @@ class TableViewCell: UITableViewCell {
     favoriteButton.tintColor = UIColor(named: "FavoriteColor")
     favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
     favoriteButton.addAction(
-      UIAction {[weak self] _ in
+      UIAction { [weak self] _ in
         guard let self = self else { return }
-        print("clicked: \(self)")
+        self.favorite?()
         // add action
-      }
-      , for: .touchUpInside)
+        // cell 구성할 때 이벤트를 받을 수 있는 delegate or closure 필요.
+        // 여기선 closure 호출만 하면 됨
+      },
+      for: .touchUpInside
+    )
 
     leftStack.axis = .vertical
     leftStack.distribution = .fillProportionally
@@ -64,15 +67,15 @@ class TableViewCell: UITableViewCell {
     containerStack.axis = .horizontal
     containerStack.distribution = .equalSpacing
     containerStack.alignment = .center
-
-    for item in [leftStack, containerStack, favoriteButton] {
+    
+    for item in [leftStack, containerStack] {
       contentView.addSubview(item)
     }
 
     for label in [countryCodeLabel, countryNameLabel] {
       leftStack.addArrangedSubview(label)
     }
-    
+
     for label in [currencyRateLabel, favoriteButton] {
       rightStack.addArrangedSubview(label)
     }
@@ -85,7 +88,7 @@ class TableViewCell: UITableViewCell {
       $0.top.equalToSuperview()
       $0.leading.equalToSuperview()
     }
-    
+
     rightStack.snp.makeConstraints {
       $0.top.equalToSuperview()
       $0.trailing.equalToSuperview()
@@ -98,9 +101,15 @@ class TableViewCell: UITableViewCell {
     }
   }
 
-  func configureCell(country: String, rate: Double) {
+  func configureCell(country: String, rate: Double, isFavorite: Bool) {
     countryCodeLabel.text = country
     countryNameLabel.text = CurrencyStruct.name(for: country)
+    // 환율 차이 넣기
     currencyRateLabel.text = String(format: "%.4f", rate)
+    let imageName = isFavorite ? "star.fill" : "star"
+    favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
   }
+
+  // closure
+  var favorite: (() -> Void)?
 }

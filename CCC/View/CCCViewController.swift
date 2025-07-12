@@ -5,9 +5,9 @@
 //  Created by luca on 7/7/25.
 //
 
+import CoreData
 import SnapKit
 import UIKit
-import CoreData
 
 // Compact Currency Calculator
 // [↓↓환율 스택↓↓↓]
@@ -37,14 +37,19 @@ class CCCViewController: UIViewController {
     // 잘 갖고와지는지 테스트
     //    let service = CurrencyAPI()
     //    service.apiTest()
+
   }
 
   // MARK: 클로저 바인딩 - 1. ViewController에서 ViewModel 생성 후 바인딩 설정
   private func bindViewModel() {
     // (state 바뀔 때 UI 갱신되도록 클로저 바인딩)
     viewModel.didUpdate = { [weak self] _ in
+    // viewModel.didUpdate = { [weak self] state in
       guard let self else { return }
+
       DispatchQueue.main.async {
+        // print("\(state.lastUpdateTime)")
+        // print("\(state.timeLastUpdate)")
         self.tableView.reloadData()
       }
     }
@@ -123,11 +128,12 @@ extension CCCViewController: UITableViewDataSource {
 
     if let currency = viewModel.currency(at: indexPath.row) {
       let isFavorite = CoreDataManager.shared.isFavorite(code: currency.country)
-      cell.configureCell(country: currency.country, rate: currency.rate, isFavorite: isFavorite)
+      let change = viewModel.rateChange(for: currency.country)
+      cell.configureCell(country: currency.country, rate: currency.rate, isFavorite: isFavorite, change: change)
       // closure 넘기기
       cell.favorite = { [weak self] in
         let code = currency.country
-        
+
         if isFavorite {
           CoreDataManager.shared.removeFavorite(code: code)
         } else {
@@ -143,6 +149,7 @@ extension CCCViewController: UITableViewDataSource {
 
   func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let selectedCurrency = viewModel.currency(at: indexPath.row) else { return }
+
     print("selectedCurrency: \(selectedCurrency)")
 //    title = "환율 정보"
     let calculatorVC = CalculatorConroller()
@@ -151,7 +158,6 @@ extension CCCViewController: UITableViewDataSource {
     calculatorVC.currency = selectedCurrency
     navigationController?.pushViewController(calculatorVC, animated: true)
   }
-  
 }
 
 extension CCCViewController: UITableViewDelegate {}
@@ -159,6 +165,7 @@ extension CCCViewController: UITableViewDelegate {}
 extension CCCViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange _: String) {
     guard let text = searchBar.text else { return }
+
     viewModel.search(searchText: text)
     tableView.reloadData()
   }

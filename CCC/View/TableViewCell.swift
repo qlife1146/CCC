@@ -48,6 +48,7 @@ class TableViewCell: UITableViewCell {
     favoriteButton.addAction(
       UIAction { [weak self] _ in
         guard let self = self else { return }
+
         self.favorite?()
         // add action
         // cell 구성할 때 이벤트를 받을 수 있는 delegate or closure 필요.
@@ -67,7 +68,7 @@ class TableViewCell: UITableViewCell {
     containerStack.axis = .horizontal
     containerStack.distribution = .equalSpacing
     containerStack.alignment = .center
-    
+
     for item in [leftStack, containerStack] {
       contentView.addSubview(item)
     }
@@ -101,11 +102,18 @@ class TableViewCell: UITableViewCell {
     }
   }
 
-  func configureCell(country: String, rate: Double, isFavorite: Bool) {
+  func configureCell(country: String, rate: Double, isFavorite: Bool, change: ChangeType) {
     countryCodeLabel.text = country
     countryNameLabel.text = CurrencyStruct.name(for: country)
     // 환율 차이 넣기
-    currencyRateLabel.text = String(format: "%.4f", rate)
+    let changeText: String
+    switch change {
+    case .up: changeText = "U"
+    case .down: changeText = "D"
+    default: changeText = ""
+    }
+    currencyRateLabel.text = "\(changeText)\(String (format: "%.4f", rate))"
+
     let imageName = isFavorite ? "star.fill" : "star"
     favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
   }

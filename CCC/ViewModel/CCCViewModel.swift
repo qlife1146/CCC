@@ -8,6 +8,10 @@
 import UIKit
 
 // class CCCViewModel {
+enum ChangeType {
+  case up, down, same, none
+}
+
 class CCCViewModel: ViewModelProtocol {
   // MARK: 클로저 바인딩 - 3. View 모델이 API 요청
 
@@ -15,20 +19,23 @@ class CCCViewModel: ViewModelProtocol {
     case fetchCurrency
   }
 
+
   // ViewModel이 들고 있는 현 상태
   struct State {
-    var result: String? = ""
-    var timeLastUpdate: String = ""
-    var timeNextUpdate: String = ""
+    // var result: String? = ""
+    // var timeNextUpdate: String = ""
     var isFavorite: Bool = false
     var ratesList: [String: Double] = [:] // [country:rate]
     var ratesKeyList: [String] = [] // key 순서 확정을 위한 배열(sorted): 현재는 전체 배열
-//    var bookmarkList: [String] = [] // 즐찾을 위한 필터링 배열: 전체 배열-즐찾
     var filteredList: [String] = [] // 검색을 위한 필터링 배열: 현재는 전제 배열의 일부(필터링)
+    var timeLastUpdate: String = "" // 저장 업데이트 날짜
+    var lastUpdateTime: String = "" // 최근 업데이트 날짜
   }
 
   // 클로저로 바인딩
   private(set) var state = State()
+  private var lastRatesList: [String: Double] = [:]
+
   var didUpdate: ((State) -> Void)?
   // alert 및 오류 확인을 위한 에러 접수
   var didFail: ((Error) -> Void)?
@@ -45,30 +52,25 @@ class CCCViewModel: ViewModelProtocol {
     }
   }
 
-  var onCurrencyUpdated: (() -> Void)?
-
   func fetchCurrencyData() {
     service.fetchCurrencies { [weak self] result in
-      guard let self = self else {
-        return
-      }
+      guard let self = self else { return }
 
       switch result {
       case let .success(data):
         // MARK: 클로저 바인딩 - 4. ViewModel이 API 응답을 받고 state를 업데이트
 
-        self.state.result = data.result
         self.state.ratesList = data.rates
         self.state.ratesKeyList = self.state.ratesList.keys.sorted()
-//        { _, _ in // favorite, name
-//
-//        } // 지금은 string으로 sorted.
-
-//        self.state.filteredList = self.state.ratesKeyList
         self.updateFavoriteState()
 
-        // MARK: 클로저 바인딩 - 5. ViewModel 클로저 호출(상태 변함 알림)
+        if self.state.timeLastUpdate != data.timeLastUpdate { // 업데이트 날짜를 비교하고 변화가 있으면 이전 값 저장
+          self.lastRatesList = self.state.ratesList // 이전 데이터 저장
+          self.state.lastUpdateTime = self.state.timeLastUpdate
+          self.state.timeLastUpdate = data.timeLastUpdate // 이건 가져온 것을 그대로 써서 data.--
+        }
 
+        // MARK: 클로저 바인딩 - 5. ViewModel 클로저 호출(상태 변함 알림)
         self.didUpdate?(self.state)
       case let .failure(error):
         print("error: \(error.localizedDescription)")
@@ -81,6 +83,7 @@ class CCCViewModel: ViewModelProtocol {
     guard index < state.filteredList.count else {
       return nil
     }
+
     let key = state.filteredList[index]
     let rate = state.ratesList[key] ?? 0
 
@@ -110,6 +113,7 @@ class CCCViewModel: ViewModelProtocol {
   }
 
   func updateFavoriteState() {
+    // 모든 즐찾 불러와 favCodes에 담기
     let favCodes = CoreDataManager.shared.fetchAllFavorites()
 
     if let searchText = currentSearchText, !searchText.isEmpty {
@@ -139,5 +143,12 @@ class CCCViewModel: ViewModelProtocol {
       }
     }
     didUpdate?(state)
+  }
+
+  func rateChange(for code: String) -> ChangeType {
+    guard let last = lastRatesList[code], let now = state.ratesList[code] else { return .none }
+    if now > last { return .up}
+    if now < last { return .down}
+    return .same
   }
 }

@@ -8,7 +8,7 @@
 import SnapKit
 import UIKit
 
-class CalculatorConroller: UIViewController {
+class CalculatorController: UIViewController {
   var currency: (country: String, rate: Double)?
   private let titleLabel = UILabel()
 //  private let resultStackView = UIStackView()

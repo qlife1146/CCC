@@ -19,6 +19,7 @@ class TableViewCell: UITableViewCell {
   private let countryNameLabel = UILabel()
   private let leftStack = UIStackView()
   private let currencyRateLabel = UILabel()
+  private let emojiLabel = UILabel()
   private let favoriteButton = UIButton()
   private let rightStack = UIStackView()
   private let containerStack = UIStackView()
@@ -42,6 +43,11 @@ class TableViewCell: UITableViewCell {
 
     currencyRateLabel.textColor = UIColor(named: "TextColor")
     currencyRateLabel.font = Default.subTextFont
+
+    emojiLabel.font = .systemFont(ofSize: 17)
+    emojiLabel.text = ""
+
+    // emojiLabel.textAlignment = .center
 
     favoriteButton.tintColor = UIColor(named: "FavoriteColor")
     favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
@@ -77,12 +83,16 @@ class TableViewCell: UITableViewCell {
       leftStack.addArrangedSubview(label)
     }
 
-    for label in [currencyRateLabel, favoriteButton] {
+    for label in [currencyRateLabel, emojiLabel, favoriteButton] {
       rightStack.addArrangedSubview(label)
     }
 
     for label in [leftStack, rightStack] {
       containerStack.addArrangedSubview(label)
+    }
+
+    emojiLabel.snp.makeConstraints {
+      $0.width.equalTo(24)
     }
 
     leftStack.snp.makeConstraints {
@@ -105,14 +115,15 @@ class TableViewCell: UITableViewCell {
   func configureCell(country: String, rate: Double, isFavorite: Bool, change: ChangeType) {
     countryCodeLabel.text = country
     countryNameLabel.text = CurrencyStruct.name(for: country)
+
     // 환율 차이 넣기
-    let changeText: String
     switch change {
-    case .up: changeText = "U"
-    case .down: changeText = "D"
-    default: changeText = ""
+    case .up: emojiLabel.text = "⬆️"
+    case .down: emojiLabel.text = "⬇️"
+    default: emojiLabel.text = ""
     }
-    currencyRateLabel.text = "\(changeText)\(String (format: "%.4f", rate))"
+
+    currencyRateLabel.text = "\(String(format: "%.4f", rate))"
 
     let imageName = isFavorite ? "star.fill" : "star"
     favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)

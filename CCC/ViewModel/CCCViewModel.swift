@@ -19,7 +19,6 @@ class CCCViewModel: ViewModelProtocol {
     case fetchCurrency
   }
 
-
   // ViewModel이 들고 있는 현 상태
   struct State {
     // var result: String? = ""
@@ -35,6 +34,10 @@ class CCCViewModel: ViewModelProtocol {
   // 클로저로 바인딩
   private(set) var state = State()
   private var lastRatesList: [String: Double] = [:]
+
+  init() {
+    self.lastRatesList = CoreDataManager.shared.loadLastRates()
+  }
 
   var didUpdate: ((State) -> Void)?
   // alert 및 오류 확인을 위한 에러 접수
@@ -65,13 +68,16 @@ class CCCViewModel: ViewModelProtocol {
         self.updateFavoriteState()
 
         if self.state.timeLastUpdate != data.timeLastUpdate { // 업데이트 날짜를 비교하고 변화가 있으면 이전 값 저장
+          CoreDataManager.shared.saveLastRates(self.state.ratesList, date: data.timeLastUpdate)
           self.lastRatesList = self.state.ratesList // 이전 데이터 저장
           self.state.lastUpdateTime = self.state.timeLastUpdate
           self.state.timeLastUpdate = data.timeLastUpdate // 이건 가져온 것을 그대로 써서 data.--
         }
 
         // MARK: 클로저 바인딩 - 5. ViewModel 클로저 호출(상태 변함 알림)
+
         self.didUpdate?(self.state)
+
       case let .failure(error):
         print("error: \(error.localizedDescription)")
         self.didFail?(error)
@@ -147,8 +153,27 @@ class CCCViewModel: ViewModelProtocol {
 
   func rateChange(for code: String) -> ChangeType {
     guard let last = lastRatesList[code], let now = state.ratesList[code] else { return .none }
-    if now > last { return .up}
-    if now < last { return .down}
+
+    let diff = now - last
+    if abs(diff) > 0.01 {
+      return diff > 0 ? .up : .down
+    }
     return .same
+  }
+
+  func setTestLastRates(_ testRates: [String: Double]) {
+    lastRatesList = testRates
+  }
+
+  func loadLastRatesOrMock() {
+    let loaded = CoreDataManager.shared.loadLastRates()
+    if loaded.isEmpty {
+      lastRatesList = [
+        "AED": 1.0,
+        "KRW": 1000.0
+      ]
+    } else {
+      lastRatesList = loaded
+    }
   }
 }

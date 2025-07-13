@@ -10,6 +10,10 @@
 		81B4A24A2E1FE57900652244 /* FavoriteCurrency+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A2492E1FE57900652244 /* FavoriteCurrency+CoreDataProperties.swift */; };
 		81B4A24B2E1FE57900652244 /* FavoriteCurrency+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A2482E1FE57900652244 /* FavoriteCurrency+CoreDataClass.swift */; };
 		81B4A24D2E1FE77A00652244 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A24C2E1FE77500652244 /* CoreDataManager.swift */; };
+		81B4A2712E22819900652244 /* LastScreen+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A2702E22819900652244 /* LastScreen+CoreDataProperties.swift */; };
+		81B4A2722E22819900652244 /* LastScreen+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A26F2E22819900652244 /* LastScreen+CoreDataClass.swift */; };
+		81B4A27B2E24409100652244 /* LastRates+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A2792E24409100652244 /* LastRates+CoreDataClass.swift */; };
+		81B4A27C2E24409100652244 /* LastRates+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B4A27A2E24409100652244 /* LastRates+CoreDataProperties.swift */; };
 		81E7A2A12E1B8697004C5C32 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81E7A2A02E1B8697004C5C32 /* SnapKit */; };
 		81E7A2A62E1B86AE004C5C32 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 81E7A2A52E1B86AE004C5C32 /* Alamofire */; };
 /* End PBXBuildFile section */
@@ -18,6 +22,10 @@
 		81B4A2482E1FE57900652244 /* FavoriteCurrency+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteCurrency+CoreDataClass.swift"; sourceTree = "<group>"; };
 		81B4A2492E1FE57900652244 /* FavoriteCurrency+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteCurrency+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		81B4A24C2E1FE77500652244 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		81B4A26F2E22819900652244 /* LastScreen+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LastScreen+CoreDataClass.swift"; sourceTree = "<group>"; };
+		81B4A2702E22819900652244 /* LastScreen+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LastScreen+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		81B4A2792E24409100652244 /* LastRates+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LastRates+CoreDataClass.swift"; sourceTree = "<group>"; };
+		81B4A27A2E24409100652244 /* LastRates+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LastRates+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		81E7A27C2E1B8174004C5C32 /* CCC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,6 +66,10 @@
 		81E7A2732E1B8174004C5C32 = {
 			isa = PBXGroup;
 			children = (
+				81B4A2792E24409100652244 /* LastRates+CoreDataClass.swift */,
+				81B4A27A2E24409100652244 /* LastRates+CoreDataProperties.swift */,
+				81B4A26F2E22819900652244 /* LastScreen+CoreDataClass.swift */,
+				81B4A2702E22819900652244 /* LastScreen+CoreDataProperties.swift */,
 				81B4A24C2E1FE77500652244 /* CoreDataManager.swift */,
 				81B4A2482E1FE57900652244 /* FavoriteCurrency+CoreDataClass.swift */,
 				81B4A2492E1FE57900652244 /* FavoriteCurrency+CoreDataProperties.swift */,
@@ -157,6 +169,10 @@
 				81B4A24A2E1FE57900652244 /* FavoriteCurrency+CoreDataProperties.swift in Sources */,
 				81B4A24B2E1FE57900652244 /* FavoriteCurrency+CoreDataClass.swift in Sources */,
 				81B4A24D2E1FE77A00652244 /* CoreDataManager.swift in Sources */,
+				81B4A27B2E24409100652244 /* LastRates+CoreDataClass.swift in Sources */,
+				81B4A27C2E24409100652244 /* LastRates+CoreDataProperties.swift in Sources */,
+				81B4A2712E22819900652244 /* LastScreen+CoreDataProperties.swift in Sources */,
+				81B4A2722E22819900652244 /* LastScreen+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

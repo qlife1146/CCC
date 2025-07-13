@@ -190,7 +190,6 @@ struct CurrencyStruct: Codable {
   enum CodingKeys: String, CodingKey {
     case result
     case timeLastUpdate = "time_last_update_utc"
-//    case timeNextUpdate = "time_next_update_utc"
     case rates
   }
 }

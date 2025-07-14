@@ -69,14 +69,10 @@ class CCCViewModel: ViewModelProtocol {
 
         if self.state.timeLastUpdate != data.timeLastUpdate { // 업데이트 날짜를 비교하고 변화가 있으면 이전 값 저장
           CoreDataManager.shared.saveLastRates(data.rates, date: data.timeLastUpdate)
-          self.lastRatesList = self.state.ratesList // 이전 데이터 저장
+          self.lastRatesList = data.rates // 이전 데이터 저장
           self.state.lastUpdateTime = self.state.timeLastUpdate
           self.state.timeLastUpdate = data.timeLastUpdate // 이건 가져온 것을 그대로 써서 data.--
         }
-
-        self.state.ratesList = data.rates
-        self.state.ratesKeyList = self.state.ratesList.keys.sorted()
-        self.updateFavoriteState()
 
         // MARK: 클로저 바인딩 - 5. ViewModel 클로저 호출(상태 변함 알림)
 

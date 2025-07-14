@@ -16,9 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   {
     guard let windowScene = (scene as? UIWindowScene) else { return }
 
+    // let lastScreen = CoreDataManager.shared.fetchLastScreen()
+    let mainVC = CCCViewController()
+    let nav = UINavigationController(rootViewController: mainVC)
     let window = UIWindow(windowScene: windowScene)
-    window.rootViewController = UINavigationController(rootViewController: CCCViewController())
-//    window.rootViewController = CCCViewController() // 메인 뷰컨트롤러
+    window.rootViewController = nav
     self.window = window
     window.makeKeyAndVisible()
   }

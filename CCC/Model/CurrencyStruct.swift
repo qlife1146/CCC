@@ -14,7 +14,7 @@ struct CurrencyStruct: Codable {
   // ex: "Mon, 07 Jul 2025 00:02:32 +0000"
   let timeLastUpdate: String
   // ex: "Tue, 08 Jul 2025 00:14:22 +0000"
-  let timeNextUpdate: String
+  //  let timeNextUpdate: String
   let rates: [String: Double]
 
   static let countryName: [String: String] = [
@@ -190,7 +190,6 @@ struct CurrencyStruct: Codable {
   enum CodingKeys: String, CodingKey {
     case result
     case timeLastUpdate = "time_last_update_utc"
-    case timeNextUpdate = "time_next_update_utc"
     case rates
   }
 }

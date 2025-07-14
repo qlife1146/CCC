@@ -19,6 +19,7 @@ class TableViewCell: UITableViewCell {
   private let countryNameLabel = UILabel()
   private let leftStack = UIStackView()
   private let currencyRateLabel = UILabel()
+  private let emojiLabel = UILabel()
   private let favoriteButton = UIButton()
   private let rightStack = UIStackView()
   private let containerStack = UIStackView()
@@ -43,11 +44,17 @@ class TableViewCell: UITableViewCell {
     currencyRateLabel.textColor = UIColor(named: "TextColor")
     currencyRateLabel.font = Default.subTextFont
 
+    emojiLabel.font = .systemFont(ofSize: 17)
+    emojiLabel.text = ""
+
+    // emojiLabel.textAlignment = .center
+
     favoriteButton.tintColor = UIColor(named: "FavoriteColor")
     favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
     favoriteButton.addAction(
       UIAction { [weak self] _ in
         guard let self = self else { return }
+
         self.favorite?()
         // add action
         // cell 구성할 때 이벤트를 받을 수 있는 delegate or closure 필요.
@@ -67,7 +74,7 @@ class TableViewCell: UITableViewCell {
     containerStack.axis = .horizontal
     containerStack.distribution = .equalSpacing
     containerStack.alignment = .center
-    
+
     for item in [leftStack, containerStack] {
       contentView.addSubview(item)
     }
@@ -76,12 +83,16 @@ class TableViewCell: UITableViewCell {
       leftStack.addArrangedSubview(label)
     }
 
-    for label in [currencyRateLabel, favoriteButton] {
+    for label in [currencyRateLabel, emojiLabel, favoriteButton] {
       rightStack.addArrangedSubview(label)
     }
 
     for label in [leftStack, rightStack] {
       containerStack.addArrangedSubview(label)
+    }
+
+    emojiLabel.snp.makeConstraints {
+      $0.width.equalTo(24)
     }
 
     leftStack.snp.makeConstraints {
@@ -101,11 +112,19 @@ class TableViewCell: UITableViewCell {
     }
   }
 
-  func configureCell(country: String, rate: Double, isFavorite: Bool) {
+  func configureCell(country: String, rate: Double, isFavorite: Bool, change: ChangeType) {
     countryCodeLabel.text = country
     countryNameLabel.text = CurrencyStruct.name(for: country)
+
     // 환율 차이 넣기
-    currencyRateLabel.text = String(format: "%.4f", rate)
+    switch change {
+    case .up: emojiLabel.text = "⬆️"
+    case .down: emojiLabel.text = "⬇️"
+    default: emojiLabel.text = ""
+    }
+
+    currencyRateLabel.text = "\(String(format: "%.4f", rate))"
+
     let imageName = isFavorite ? "star.fill" : "star"
     favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
   }

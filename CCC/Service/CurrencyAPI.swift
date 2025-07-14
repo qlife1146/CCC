@@ -31,8 +31,7 @@ final class CurrencyAPI {
           completion(.success(result))
         case let .failure(error):
           completion(.failure(error))
-          // localizedDescription: 에러 간략화
-          print("error2: \(error.localizedDescription)")
+          print("error2: \(error.localizedDescription)") // localizedDescription: 에러 간략화
         }
       }
   }
